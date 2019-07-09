@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "moduleResolution": "node",
+    "module": "esnext",
+    "outDir": "js/fine",
+    "esModuleInterop": true,
+    "declaration": true,
+    "declarationMap": false,
+    "rootDir": "./src"
+  }
+}

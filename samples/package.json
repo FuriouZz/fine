@@ -1,0 +1,42 @@
+{
+  "name": "2018-ddb-hunter-frontend",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "config": "tsc -p config/tsconfig.json",
+    "predev": "npm run config",
+    "dev": "webpack --config tmp/build.js",
+    "predev:server": "npm run config",
+    "dev:server": "webpack-dev-server --config tmp/build.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "animejs": "^3.0.1",
+    "eventemitter3": "3.1.0",
+    "gl-matrix": "^3.0.0",
+    "lodash.template": "4.4.0",
+    "lol": "github:wk-js/lol.js#0.0.3",
+    "when": "3.7.8"
+  },
+  "devDependencies": {
+    "@types/lodash.template": "^4.4.6",
+    "@types/node": "^12.0.12",
+    "@types/stylus": "^0.48.31",
+    "@types/webgl2": "0.0.4",
+    "@types/webpack": "^4.4.34",
+    "@types/webpack-dev-server": "^3.1.6",
+    "asset-pipeline": "github:wk-js/asset-pipeline#v2",
+    "extract-loader": "^3.1.0",
+    "file-loader": "^4.0.0",
+    "front-matter": "3.0.1",
+    "raw-loader": "0.5.1",
+    "stylus": "0.54.5",
+    "stylus-loader": "3.0.2",
+    "ts-loader": "^5.4.5",
+    "typescript": "^3.5.2",
+    "webpack": "^4.35.2",
+    "webpack-cli": "^3.3.5",
+    "webpack-dev-server": "^3.7.2"
+  }
+}

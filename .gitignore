@@ -1,0 +1,8 @@
+.DS_Store
+node_modules
+public/*
+build/*
+tmp/*
+!tmp/.gitkeep
+!build/.gitkeep
+!public/.gitkeep

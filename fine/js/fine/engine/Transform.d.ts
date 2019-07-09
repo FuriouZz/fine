@@ -1,0 +1,33 @@
+import { mat4, quat, vec3 } from "gl-matrix";
+export declare class Transform {
+    scale: vec3;
+    position: vec3;
+    rotation: quat;
+    parent: Transform;
+    children: Transform[];
+    object: Object;
+    private matrix;
+    private worldMatrix;
+    private invalidWorldMatrix;
+    private invalidMatrix;
+    constructor();
+    setScale(x?: number, y?: number, z?: number): void;
+    setPosition(x?: number, y?: number, z?: number): void;
+    setRotation(axis: vec3 | number[], radian: number): void;
+    rotateX(radian: number): void;
+    rotateY(radian: number): void;
+    rotateZ(radian: number): void;
+    translate(x: number, y: number, z: number): void;
+    decompose(): void;
+    getMatrix(): mat4;
+    setMatrix(m: mat4): void;
+    getWorldMatrix(): mat4;
+    getRoot(): any;
+    getInvalidParent(): any;
+    updateMatrix(): void;
+    updateWorldMatrix(): void;
+    private _updateWorldMatrix;
+    invalidate(): void;
+    addChild(t: Transform): void;
+    removeChild(t: Transform): Transform[];
+}

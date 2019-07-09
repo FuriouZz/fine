@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "moduleResolution": "node",
+    "module": "esnext",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "lib": [ "dom" ],
+    "baseUrl": "./",
+    "paths": {
+      "*": [
+        "app/scripts/*",
+        "../fine/js/*"
+      ]
+    },
+    "typeRoots": [
+      "node_modules/@types",
+      "app/scripts/typings"
+    ]
+  },
+  "exclude": [ "./tmp", "./config", "./public", "./build" ]
+}
