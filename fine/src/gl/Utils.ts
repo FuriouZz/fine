@@ -1,4 +1,5 @@
 import { GLType, GLTypeSize, GLContext, GLShaderType } from "./constants/Types";
+import { pad } from "lol/js/string"
 
 export function GetTypeSize(type: GLType) {
   switch (type) {
@@ -13,12 +14,22 @@ export function GetTypeSize(type: GLType) {
   }
 }
 
+function format(code: string) {
+  const lines = code.split(/\n/)
+  const length = lines.length.toString().length
+  return lines.map((line, index) => {
+    return pad((index + 1).toString(), length, "0") + ": " + line
+  })
+  .join('\n')
+}
+
 export function CompileShader(gl: GLContext, type: GLShaderType, code: string) {
   const shader = gl.createShader( type )
   gl.shaderSource( shader, code )
   gl.compileShader( shader )
 
   if (!gl.getShaderParameter( shader, gl.COMPILE_STATUS )) {
+    console.warn( format(code) )
     console.warn( gl.getShaderInfoLog(shader) )
     throw new Error(`Can't compile shader`)
   }

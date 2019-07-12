@@ -42,7 +42,7 @@ export class Circle {
   constructor(private gl: GLContext, private state: State) {
     this.onUpdateUniforms = this.onUpdateUniforms.bind(this)
 
-    Shader.load('worm.glsl').then((v) => {
+    Shader.load('circle.glsl').then((v) => {
       this._init(v.data)
     })
   }

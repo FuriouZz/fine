@@ -6,6 +6,7 @@ import { Camera } from "fine/engine/camera/Camera";
 import { Perspective } from "fine/engine/camera/Perspective";
 import { Circle } from "./circle";
 import { Keyboard } from "fine/io/Keyboard"
+import { Cylinder } from "./cylinder";
 
 let $canvas: HTMLCanvasElement
 let rootTransform: Transform
@@ -18,11 +19,12 @@ let deltaTime: number = 0
 let dir: number[] = [1, 1]
 let z: number[] = [ 0, 0 ]
 let ztime = 0
+let cylinder: Cylinder
 
 function render( gl: GLContext ) {
   deltaTime = (performance.now() / 1000) - time
   time += deltaTime
-  update()
+  // update()
 
   gl.bindFramebuffer(GL.FRAMEBUFFER, null)
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
@@ -36,9 +38,16 @@ function render( gl: GLContext ) {
 
   for (let i = 0; i < circles.length; i++) {
     const circle = circles[i];
+    circle.transform.translate(Math.cos(time) * 0.01, Math.sin(time + i * Math.PI) * 0.01,0)
     circle.MVP(camera)
     circle.render()
   }
+  cylinder.transform.position[1] = -0.5
+  cylinder.transform.invalidate()
+  cylinder.transform.rotateY(0.25 * deltaTime)
+  cylinder.MVP(camera)
+  cylinder.Anchors( circles.map((c) => c.transform.position) )
+  cylinder.render()
 
   window.requestAnimationFrame(() => render(gl))
 }
@@ -125,11 +134,17 @@ z[1] = -1
 
   for (let i = 0; i < 10; i++) {
     const circle = new Circle(gl, state)
-    circle.transform.translate(0, 0, -2)
-    circle.transform.setScale(0.5, 0.5, 0.5)
+    circle.transform.translate(i*1, 0, -2)
+    circle.transform.setScale(0.1, 0.1, 0.1)
     rootTransform.addChild( circle.transform )
     circles[i] = circle
   }
+
+  cylinder = new Cylinder(state)
+  cylinder.transform.translate(0, 0, -2)
+  cylinder.transform.setScale(0.5, 0.5, 0.5)
+  // cylinder.transform.rotateY(1.5)
+  rootTransform.addChild( cylinder.transform )
 
   resize()
   render(gl)

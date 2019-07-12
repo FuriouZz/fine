@@ -5,9 +5,9 @@ export interface IShader {
   get(name?: string, params?: any): string
 }
 
-class ShaderImports {
+const ShaderImports = {
 
-  static include(path: string, params: { data?: any, section?: string } = {}) {
+  include(path: string, params: { data?: any, section?: string } = {}) {
     const shader = Shader.resource.get(path) as ResourceItem<IShader>
     if (!shader) return `Shader at "${path}" not loaded`
     return shader.data.get(params.section, params.data)
@@ -45,19 +45,22 @@ export class Shader {
         }
       }
 
-      sections[currentPass] = sections[currentPass] || ''
-      sections[currentPass] += line
+      if (currentPass) {
+        sections[currentPass] = sections[currentPass] || ''
+        sections[currentPass] += line + '\n'
+      }
     }
 
     return {
       get(name = "default", params?: any) {
         const shader = sections[name]
-        return template(shader, {
+        const t = template(shader, {
           interpolate: /{{([\s\S]+?)}}/g,
           evaluate: /{%([\s\S]+?)%}/g,
           escape: /{#([\s\S]+?)#}/g,
           imports: ShaderImports
         })(params)
+        return t
       }
     } as IShader
   }

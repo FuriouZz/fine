@@ -1,3 +1,4 @@
+import { pad } from "lol/js/string";
 export function GetTypeSize(type) {
     switch (type) {
         case 5120 /* BYTE */: {
@@ -24,11 +25,20 @@ export function GetTypeSize(type) {
         default: return 0;
     }
 }
+function format(code) {
+    const lines = code.split(/\n/);
+    const length = lines.length.toString().length;
+    return lines.map((line, index) => {
+        return pad((index + 1).toString(), length, "0") + ": " + line;
+    })
+        .join('\n');
+}
 export function CompileShader(gl, type, code) {
     const shader = gl.createShader(type);
     gl.shaderSource(shader, code);
     gl.compileShader(shader);
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        console.warn(format(code));
         console.warn(gl.getShaderInfoLog(shader));
         throw new Error(`Can't compile shader`);
     }

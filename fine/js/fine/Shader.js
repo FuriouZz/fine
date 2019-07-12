@@ -8,14 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { Resource } from "./Resource";
 import template from "lodash.template";
-class ShaderImports {
-    static include(path, params = {}) {
+const ShaderImports = {
+    include(path, params = {}) {
         const shader = Shader.resource.get(path);
         if (!shader)
             return `Shader at "${path}" not loaded`;
         return shader.data.get(params.section, params.data);
     }
-}
+};
 export class Shader {
     static load(path) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -41,18 +41,21 @@ export class Shader {
                     continue;
                 }
             }
-            sections[currentPass] = sections[currentPass] || '';
-            sections[currentPass] += line;
+            if (currentPass) {
+                sections[currentPass] = sections[currentPass] || '';
+                sections[currentPass] += line + '\n';
+            }
         }
         return {
             get(name = "default", params) {
                 const shader = sections[name];
-                return template(shader, {
+                const t = template(shader, {
                     interpolate: /{{([\s\S]+?)}}/g,
                     evaluate: /{%([\s\S]+?)%}/g,
                     escape: /{#([\s\S]+?)#}/g,
                     imports: ShaderImports
                 })(params);
+                return t;
             }
         };
     }

@@ -45,8 +45,7 @@ export class Geometry {
     } else {
       this.indices.instanced = this.instanced;
       this.indices.instanceCount = this.instanceCount;
-      this.indices.vertexCount = this.drawCount < 0 ? this.indices.vertexCount : this.drawCount
-      this.indices.draw( this.drawMode, this.indices.vertexCount, this.drawOffset );
+      this.indices.draw( this.drawMode, this.drawCount < 0 ? this.indices.vertexCount : this.drawCount, this.drawOffset );
     }
   }
 

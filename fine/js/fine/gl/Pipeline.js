@@ -50,10 +50,11 @@ export class Pipeline extends StateConfig {
                 this.gl.getError();
                 continue;
             }
-            uniformLocation = this.gl.getUniformLocation(this.program, uniform.name);
+            const name = uniform.name.replace(/\[\d+\]/, '');
+            uniformLocation = this.gl.getUniformLocation(this.program, name);
             if (uniformLocation == null)
                 continue;
-            this.uniforms[uniform.name] = new Uniform(this.gl, uniformLocation, uniform);
+            this.uniforms[name] = new Uniform(this.gl, uniformLocation, uniform);
         }
     }
     use() {
