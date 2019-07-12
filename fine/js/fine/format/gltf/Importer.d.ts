@@ -1,5 +1,5 @@
 import { Parser } from './Parser';
-import { Resource } from '../../Resource';
+import { Resource } from '../../engine/Resource';
 interface IGLTFData {
     type: "gltf" | "glb";
     bin: ArrayBuffer;
@@ -10,7 +10,7 @@ export declare class Importer {
     data: IGLTFData;
     parser: Parser;
     constructor(resource: Resource);
-    load(path: string): Promise<import("../../Resource").ResourceItem<unknown>>;
+    load(path: string): Promise<import("../../engine/Resource").ResourceItem<unknown>>;
     private _loadJSON;
     private _loadBinary;
     private _parseBinary;

@@ -1,12 +1,14 @@
-export declare type IDispatcherListener<T> = (data?: T) => void;
-export interface IDispatcherListenerItem<T> {
-    fn: IDispatcherListener<T>;
+import { List } from "lol/js/list";
+export declare type Listener<T> = (data: T) => void;
+interface ListenerObject<T> {
     once: boolean;
+    fn: Listener<T>;
 }
 export declare class Dispatcher<T> {
-    listeners: Array<IDispatcherListenerItem<T>>;
-    on(listener: IDispatcherListener<T>): void;
-    once(listener: IDispatcherListener<T>): void;
-    off(listener: IDispatcherListener<T>): void;
+    listeners: List<ListenerObject<T>>;
+    on(listener: Listener<T>): void;
+    once(listener: Listener<T>): void;
+    off(listener: Listener<T>): void;
     dispatch(data?: T): void;
 }
+export {};

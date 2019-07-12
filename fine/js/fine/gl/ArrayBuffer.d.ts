@@ -8,7 +8,7 @@ export declare class VertexElement {
     offset: number;
     normalize: boolean;
     constructor(name: string, type: GLType, size: number, offset: number, normalize: boolean);
-    readonly component_size: import("./constants/Types").GLTypeSize | 0;
+    readonly component_size: 0 | import("./constants/Types").GLTypeSize;
     readonly byte_size: number;
 }
 export declare class ArrayBuffer extends Buffer {

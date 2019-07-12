@@ -1,39 +1,32 @@
+import { List } from "lol/js/list";
+import { toIterable } from "lol/js/list/utils";
 export class Dispatcher {
     constructor() {
-        this.listeners = [];
+        this.listeners = new List();
     }
     on(listener) {
-        this.listeners.push({ once: false, fn: listener });
+        this.listeners.add({ once: false, fn: listener });
     }
     once(listener) {
-        this.listeners.push({ once: true, fn: listener });
+        this.listeners.add({ once: true, fn: listener });
     }
     off(listener) {
-        let i = 0;
-        let len = this.listeners.length;
-        while (i < len) {
-            if (this.listeners[i]) {
-                if (this.listeners[i].fn == listener) {
-                    break;
-                }
+        let curr;
+        for (const l of toIterable(this.listeners)) {
+            if (l.fn == listener) {
+                curr = l;
+                break;
             }
-            i++;
         }
-        if (i < len && i >= 0) {
-            this.listeners.splice(i, 1);
-        }
+        if (curr)
+            this.listeners.remove(curr);
     }
     dispatch(data) {
-        let i = 0;
-        let len = this.listeners.length;
-        while (i < len) {
-            if (this.listeners[i]) {
-                this.listeners[i].fn(data);
-                if (this.listeners[i].once) {
-                    this.off(this.listeners[i].fn);
-                }
+        for (const listener of toIterable(this.listeners)) {
+            listener.fn(data);
+            if (listener.once) {
+                this.listeners.remove(listener);
             }
-            i++;
         }
     }
 }

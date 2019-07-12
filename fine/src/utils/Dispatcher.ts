@@ -1,50 +1,43 @@
-export type IDispatcherListener<T> = (data?: T) => void
+import { List } from "lol/js/list";
+import { toIterable } from "lol/js/list/utils";
 
-export interface IDispatcherListenerItem<T> {
-  fn: IDispatcherListener<T>,
-  once: boolean
+export type Listener<T> = (data: T) => void
+
+interface ListenerObject<T> {
+  once: boolean,
+  fn: Listener<T>
 }
 
 export class Dispatcher<T> {
 
-  listeners: Array<IDispatcherListenerItem<T>> = []
+  listeners = new List<ListenerObject<T>>()
 
-  on(listener: IDispatcherListener<T>) {
-    this.listeners.push({ once: false, fn: listener })
+  on(listener: Listener<T>) {
+    this.listeners.add({ once: false, fn: listener })
   }
 
-  once(listener: IDispatcherListener<T>) {
-    this.listeners.push({ once: true, fn: listener })
+  once(listener: Listener<T>) {
+    this.listeners.add({ once: true, fn: listener })
   }
 
-  off(listener: IDispatcherListener<T>) {
-    let i = 0
-    let len = this.listeners.length
-    while (i < len) {
-      if (this.listeners[i]) {
-        if (this.listeners[i].fn == listener) {
-          break;
-        }
+  off(listener: Listener<T>) {
+    let curr: any
+    for (const l of toIterable(this.listeners)) {
+      if (l.fn == listener) {
+        curr = l
+        break
       }
-      i++
     }
 
-    if (i < len && i >= 0) {
-      this.listeners.splice( i, 1 )
-    }
+    if (curr) this.listeners.remove(curr)
   }
 
   dispatch(data?: T) {
-    let i = 0
-    let len = this.listeners.length
-    while (i < len) {
-      if (this.listeners[i]) {
-        this.listeners[i].fn(data)
-        if (this.listeners[i].once) {
-          this.off(this.listeners[i].fn)
-        }
+    for (const listener of toIterable(this.listeners)) {
+      listener.fn(data)
+      if (listener.once) {
+        this.listeners.remove(listener)
       }
-      i++
     }
   }
 

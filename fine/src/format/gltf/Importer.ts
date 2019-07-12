@@ -1,6 +1,6 @@
 import { extname } from 'path';
 import { Parser } from './Parser'
-import { Resource } from '../../Resource';
+import { Resource } from '../../engine/Resource';
 
 interface IGLTFData {
   type: "gltf" | "glb",
