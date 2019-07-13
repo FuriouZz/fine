@@ -8,7 +8,8 @@ export class System {
 
   resize = new Dispatcher<Float32Array>()
 
-  paused = true
+  enabled = false
+  rafPaused = true
   update = new Dispatcher()
   render = new Dispatcher()
 
@@ -21,7 +22,7 @@ export class System {
 
   constructor() {
     this._RAF = this._RAF.bind(this)
-    this._onResize = this._onResize.bind(this)
+    this.onResize = this.onResize.bind(this)
     this.enable()
   }
 
@@ -30,18 +31,23 @@ export class System {
   }
 
   enable() {
-    this._onResize()
-    window.addEventListener('resize', this._onResize)
-    this.paused = false
+    if (this.enabled) return
+    this.enabled = true
+
+    this.onResize()
+    window.addEventListener('resize', this.onResize)
+    this.rafPaused = false
     window.requestAnimationFrame(this._RAF)
   }
 
   disable() {
-    window.removeEventListener('resize', this._onResize)
-    this.paused = true
+    if (!this.enabled) return
+    this.enabled = false
+    window.removeEventListener('resize', this.onResize)
+    this.rafPaused = true
   }
 
-  private _onResize() {
+  onResize() {
     this.size[0] = window.innerWidth
     this.size[1] = window.innerHeight
     this.pixelRatio = window.devicePixelRatio
@@ -50,7 +56,7 @@ export class System {
   }
 
   private _RAF() {
-    if (this.paused) return
+    if (this.rafPaused) return
 
     const currentTime = this.currentTime
     this.deltaTime = (currentTime - this.previousTime) * this.timeScale

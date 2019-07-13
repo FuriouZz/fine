@@ -12,7 +12,7 @@ export class StateConfig {
         this.blendColor = new Float32Array([0, 0, 0, 1]);
         // Depth
         this.depthTest = false;
-        this.depthFunc = 512 /* NEVER */;
+        this.depthFunc = 513 /* LESS */;
         this.depthRange = new Float32Array([0, 0]);
         // Cullface
         this.cullFace = false;

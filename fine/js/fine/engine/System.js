@@ -5,7 +5,8 @@ export class System {
         this.size = new Float32Array([0, 0]);
         this.pixelRatio = 1;
         this.resize = new Dispatcher();
-        this.paused = true;
+        this.enabled = false;
+        this.rafPaused = true;
         this.update = new Dispatcher();
         this.render = new Dispatcher();
         this.deltaTime = 0;
@@ -14,23 +15,29 @@ export class System {
         this.timeScale = 1;
         this.inputs = new Inputs();
         this._RAF = this._RAF.bind(this);
-        this._onResize = this._onResize.bind(this);
+        this.onResize = this.onResize.bind(this);
         this.enable();
     }
     get currentTime() {
         return window.performance.now() / 1000;
     }
     enable() {
-        this._onResize();
-        window.addEventListener('resize', this._onResize);
-        this.paused = false;
+        if (this.enabled)
+            return;
+        this.enabled = true;
+        this.onResize();
+        window.addEventListener('resize', this.onResize);
+        this.rafPaused = false;
         window.requestAnimationFrame(this._RAF);
     }
     disable() {
-        window.removeEventListener('resize', this._onResize);
-        this.paused = true;
+        if (!this.enabled)
+            return;
+        this.enabled = false;
+        window.removeEventListener('resize', this.onResize);
+        this.rafPaused = true;
     }
-    _onResize() {
+    onResize() {
         this.size[0] = window.innerWidth;
         this.size[1] = window.innerHeight;
         this.pixelRatio = window.devicePixelRatio;
@@ -38,7 +45,7 @@ export class System {
         this.resize.dispatch(this.size);
     }
     _RAF() {
-        if (this.paused)
+        if (this.rafPaused)
             return;
         const currentTime = this.currentTime;
         this.deltaTime = (currentTime - this.previousTime) * this.timeScale;

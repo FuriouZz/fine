@@ -26,7 +26,7 @@ export class TouchInput {
   move = new Dispatcher<IKey>()
 
   constructor() {
-    bind(this, 'onTouch', 'onTouches')
+    bind(this, '_onTouch', '_onTouches')
   }
 
   enable($el: Element | Window) {

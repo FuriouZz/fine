@@ -15,4 +15,5 @@ export declare class Geometry {
     create_array_buffer(_data?: ArrayBufferView, _usage?: GLDrawUsage): ArrayBuffer;
     create_index_buffer(_type?: GLType, _data?: ArrayBufferView, _usage?: GLDrawUsage): IndexBuffer;
     draw(pipeline: Pipeline): void;
+    dispose(): void;
 }

@@ -40,4 +40,14 @@ export class Geometry {
             this.indices.draw(this.drawMode, this.drawCount < 0 ? this.indices.vertexCount : this.drawCount, this.drawOffset);
         }
     }
+    dispose() {
+        for (let i = 0; i < this.buffers.length; i++) {
+            const buffer = this.buffers[i];
+            buffer.dispose();
+        }
+        if (this.indices)
+            this.indices.dispose();
+        this.buffers = [];
+        this.indices = null;
+    }
 }

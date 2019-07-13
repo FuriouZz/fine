@@ -28,10 +28,11 @@ export class Shader {
   }
 
   static parse(shader: string) {
-    const sections: Record<string, string> = {}
-    sections['default'] = shader
+    const sections: Record<string, string[]> = {}
+    sections['default'] = [shader]
 
-    const lines = shader.split(/[\n\r]/g)
+    const lines = shader.replace(/\r\n/g, '\n').split(/\n/g)
+
     let currentPass: string = null
 
     for (const index in lines) {
@@ -46,20 +47,21 @@ export class Shader {
       }
 
       if (currentPass) {
-        sections[currentPass] = sections[currentPass] || ''
-        sections[currentPass] += line + '\n'
+        sections[currentPass] = sections[currentPass] || []
+        sections[currentPass].push(line)
       }
     }
 
     return {
       get(name = "default", params?: any) {
-        const shader = sections[name]
+        const shader = sections[name].join('\n')
+
         const t = template(shader, {
           interpolate: /{{([\s\S]+?)}}/g,
           evaluate: /{%([\s\S]+?)%}/g,
           escape: /{#([\s\S]+?)#}/g,
           imports: ShaderImports
-        })(params)
+        })(params).trim()
         return t
       }
     } as IShader

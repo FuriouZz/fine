@@ -22,7 +22,7 @@ export class KeyboardInput {
   pressed = new Dispatcher<IKey>()
 
   constructor() {
-    bind(this, 'onKey')
+    bind(this, '_onKey')
   }
 
   enable($el: Element | Window) {

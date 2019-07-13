@@ -29,8 +29,8 @@ export class Shader {
     }
     static parse(shader) {
         const sections = {};
-        sections['default'] = shader;
-        const lines = shader.split(/[\n\r]/g);
+        sections['default'] = [shader];
+        const lines = shader.replace(/\r\n/g, '\n').split(/\n/g);
         let currentPass = null;
         for (const index in lines) {
             const line = lines[index];
@@ -42,19 +42,19 @@ export class Shader {
                 }
             }
             if (currentPass) {
-                sections[currentPass] = sections[currentPass] || '';
-                sections[currentPass] += line + '\n';
+                sections[currentPass] = sections[currentPass] || [];
+                sections[currentPass].push(line);
             }
         }
         return {
             get(name = "default", params) {
-                const shader = sections[name];
+                const shader = sections[name].join('\n');
                 const t = template(shader, {
                     interpolate: /{{([\s\S]+?)}}/g,
                     evaluate: /{%([\s\S]+?)%}/g,
                     escape: /{#([\s\S]+?)#}/g,
                     imports: ShaderImports
-                })(params);
+                })(params).trim();
                 return t;
             }
         };

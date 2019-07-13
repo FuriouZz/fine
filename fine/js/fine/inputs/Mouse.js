@@ -17,7 +17,7 @@ export class MouseInput {
         this.down = new Dispatcher();
         this.pressed = new Dispatcher();
         this.move = new Dispatcher();
-        bind(this, 'onMouse');
+        bind(this, '_onMouse');
     }
     enable($el) {
         $el.addEventListener('mouseup', this._onMouse);

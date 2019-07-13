@@ -10,7 +10,7 @@ export class KeyboardInput {
         this.up = new Dispatcher();
         this.down = new Dispatcher();
         this.pressed = new Dispatcher();
-        bind(this, 'onKey');
+        bind(this, '_onKey');
     }
     enable($el) {
         $el.addEventListener('keyup', this._onKey);

@@ -33,6 +33,7 @@ export default async function main(env: WKEnv = { sample: "triangle" }) {
   const assets = entries.clone("assets")
   assets.source.add('app/@assets')
   assets.source.add('app/@shaders')
+  assets.source.add('../fine/shaders')
   assets.file.add('**/*')
   await assets.fetch()
 

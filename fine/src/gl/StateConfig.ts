@@ -17,7 +17,7 @@ export class StateConfig {
 
   // Depth
   depthTest = false
-  depthFunc = GL.NEVER
+  depthFunc = GL.LESS
   depthRange = new Float32Array([0, 0])
 
   // Cullface

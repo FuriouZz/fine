@@ -7,7 +7,7 @@ import { mat4 } from "gl-matrix";
 import { Uniform } from "fine/gl/Uniform";
 import { Camera } from "fine/engine/camera/Camera";
 import { Transform } from "fine/engine/Transform";
-import { Shader, IShader } from "fine/Shader";
+import { Shader, IShader } from "fine/engine/Shader";
 
 function circle(count: number = 10) {
   count = Math.max(count, 3)

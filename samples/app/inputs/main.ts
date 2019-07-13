@@ -1,13 +1,16 @@
 import { Transform } from "fine/engine/Transform";
 import { Geometry } from "fine/gl/Geometry";
-import { GLType, GLContext, GLClear } from 'fine/gl/constants/Types';
+import { GLContext, GLClear, GLPrimitive } from 'fine/gl/constants/Types';
 import { Pipeline } from 'fine/gl/Pipeline';
 import { mat4 } from 'gl-matrix';
-import { Uniform } from 'fine/gl/Uniform';
 import { State } from "fine/gl/State";
 import { GL } from "fine/gl/constants/GL";
 import { Camera } from "fine/engine/camera/Camera";
 import { System } from "fine/engine/System";
+import { PrimitiveMesh } from "fine/gl/primitives/Primitive";
+import { Perspective } from "fine/engine/camera/Perspective";
+import { Mesh } from "fine/gl/Mesh";
+import { Debug } from "fine/gl/debug/Debug"
 
 let transform: Transform
 let rootTransform: Transform
@@ -16,94 +19,69 @@ let pipeline: Pipeline
 let state: State
 let camera: Camera
 let system: System
+let prim: Mesh
 const M4 = mat4.identity(mat4.create())
-
-function onUpdateUniforms(uniforms: Record<string, Uniform>) {
-  camera.model_view_projection_matrix( transform.getMatrix(), M4 )
-  uniforms['uMVPMatrix'].matrix4( M4 )
-}
 
 function render( gl: GLContext ) {
   gl.bindFramebuffer(GL.FRAMEBUFFER, null)
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
   gl.clearColor(0, 0, 0, 1)
-  gl.clear( GLClear.COLOR_BUFFER )
+  gl.clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT )
 
-  transform.scale[0] = transform.scale[1] = transform.scale[2] = 10
-  transform.position[2] = Math.cos( system.playTime ) * 10
-  transform.invalidate()
+  // prim.transform.scale[0] = prim.transform.scale[1] = prim.transform.scale[2] = 0.5
+  // prim.transform.position[2] = Math.cos( system.playTime ) * 10
+  // prim.transform.invalidate()
+  // prim.transform.rotateY( system.deltaTime )
 
   camera.update_view_matrix()
   camera.update_view_projection_matrix()
 
   rootTransform.updateWorldMatrix()
 
-  pipeline.use()
-  geometry.draw( pipeline )
+  prim.computeModelViewProjection( camera )
+  prim.render()
+
+  state.apply()
 }
 
-function main() {
+async function main() {
   const $canvas = document.querySelector('#webgl') as HTMLCanvasElement
   const gl = $canvas.getContext('webgl2') as GLContext
-
-  system = new System()
-  system.inputs.enable(window)
-  system.inputs.key.up.on((e) => {
-    console.log("keyUP", e)
-  })
-  system.inputs.mouse.down.on((e) => {
-    console.log("mouseDOWN", e)
-  })
-  system.inputs.touch.pressed.on((e) => {
-    console.log("touchpressed", e)
-  })
-
-  // Time scale example
-  system.timeScale = 3
-
-  console.log(system);
-
-
+  state = new State(gl)
   rootTransform = new Transform()
-  transform = new Transform()
-  rootTransform.addChild(transform)
 
   camera = Camera.Perspective(90, $canvas.width/$canvas.height, 0.1, 100)
-  camera.transform.position[2] = -1
+  camera.transform.position[2] = 2
   camera.transform.invalidate()
   rootTransform.addChild( camera.transform )
 
-  geometry = new Geometry(gl)
+  const pipeline = await Debug.pipeline(state, "UV")
+  pipeline.cullFaceMode = GL.BACK
 
-  let buffer = geometry.create_array_buffer()
-  buffer.attribute("position", GLType.FLOAT, 3)
-  buffer.data(new Float32Array([
-    -0.5, -0.5, 0.0,
-    -0.0,  0.5, 0.0,
-     0.5, -0.5, 0.0
-  ]))
+  prim = PrimitiveMesh.sphere(pipeline, 1, 10, 10)
+  prim.geometry.drawMode = GLPrimitive.LINES
+  prim.geometry.drawMode = GLPrimitive.TRIANGLES
+  prim.transform.rotateX( Math.PI * 0.5 )
+  // prim.transform.rotateY( Math.PI * 0.5 )
+  rootTransform.addChild( prim.transform )
 
-  geometry.create_index_buffer(GLType.UNSIGNED_SHORT, new Uint16Array([
-    0, 1, 2
-  ]))
+  system = new System()
+  system.inputs.enable(window)
 
-  state = new State(gl)
+  // Time scale example
+  system.timeScale = 1
 
-  pipeline = new Pipeline( state )
-  pipeline.vertex_shader = `
-  attribute vec3 position;
+  system.resize.on((size) => {
+    $canvas.width = size[0]
+    $canvas.height = size[1]
+    $canvas.style.width = size[0] + 'px'
+    $canvas.style.height = size[1] + 'px'
 
-  uniform mat4 uMVPMatrix;
+    const lens = camera.lens as Perspective
+    lens.aspect = size[0] / size[1]
+  })
 
-  void main() {
-    gl_Position = uMVPMatrix * vec4(position, 1.0);
-  }`
-  pipeline.fragment_shader = `
-  void main() {
-    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-  }`
-
-  pipeline.onUpdateUniforms.on(onUpdateUniforms)
+  system.onResize()
 
   system.render.on(() => render(gl))
   // render(gl)

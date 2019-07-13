@@ -22,6 +22,10 @@ export class Uniform {
     this.gl.uniform4f(this.location, x, y, z, w)
   }
 
+  floats(v: number[]) {
+    this.gl.uniform1fv(this.location, v)
+  }
+
   int(x: number) {
     this.gl.uniform1i(this.location, x)
   }
@@ -38,27 +42,31 @@ export class Uniform {
     this.gl.uniform4i(this.location, x, y, z, w)
   }
 
-  vertor2(v: vec2) {
+  ints(v: number[]) {
+    this.gl.uniform1iv(this.location, v)
+  }
+
+  vertor2(v: vec2 | number[]) {
     this.gl.uniform2f(this.location, v[0], v[1])
   }
 
-  vertor3(v: vec3) {
+  vertor3(v: vec3 | number[]) {
     this.gl.uniform3f(this.location, v[0], v[1], v[2])
   }
 
-  vertor4(v: vec4) {
+  vertor4(v: vec4 | number[]) {
     this.gl.uniform4f(this.location, v[0], v[1], v[2], v[3])
   }
 
-  matrix2(m: mat2, transpose = false) {
+  matrix2(m: mat2 | number[], transpose = false) {
     this.gl.uniformMatrix2fv(this.location, transpose, m)
   }
 
-  matrix3(m: mat3, transpose = false) {
+  matrix3(m: mat3 | number[], transpose = false) {
     this.gl.uniformMatrix3fv(this.location, transpose, m)
   }
 
-  matrix4(m: mat4, transpose = false) {
+  matrix4(m: mat4 | number[], transpose = false) {
     this.gl.uniformMatrix4fv(this.location, transpose, m)
   }
 

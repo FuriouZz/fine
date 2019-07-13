@@ -44,7 +44,7 @@ export class ArrayBuffer extends Buffer {
             const element = this.elements[i];
             let location = pipeline.attributes[element.name];
             if (location == null)
-                return;
+                continue;
             this.gl.enableVertexAttribArray(location);
             this.gl.vertexAttribPointer(location, element.size, element.type, element.normalize, this.stride, element.offset);
         }

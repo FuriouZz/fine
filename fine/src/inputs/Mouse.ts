@@ -32,7 +32,7 @@ export class MouseInput {
   move = new Dispatcher<IKey>()
 
   constructor() {
-    bind(this, 'onMouse')
+    bind(this, '_onMouse')
   }
 
   enable($el: Element | Window) {

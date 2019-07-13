@@ -4,7 +4,8 @@ export declare class System {
     size: Float32Array;
     pixelRatio: number;
     resize: Dispatcher<Float32Array>;
-    paused: boolean;
+    enabled: boolean;
+    rafPaused: boolean;
     update: Dispatcher<unknown>;
     render: Dispatcher<unknown>;
     deltaTime: number;
@@ -16,6 +17,6 @@ export declare class System {
     readonly currentTime: number;
     enable(): void;
     disable(): void;
-    private _onResize;
+    onResize(): void;
     private _RAF;
 }

@@ -16,6 +16,9 @@ export class Uniform {
     float4(x, y, z, w) {
         this.gl.uniform4f(this.location, x, y, z, w);
     }
+    floats(v) {
+        this.gl.uniform1fv(this.location, v);
+    }
     int(x) {
         this.gl.uniform1i(this.location, x);
     }
@@ -27,6 +30,9 @@ export class Uniform {
     }
     int4(x, y, z, w) {
         this.gl.uniform4i(this.location, x, y, z, w);
+    }
+    ints(v) {
+        this.gl.uniform1iv(this.location, v);
     }
     vertor2(v) {
         this.gl.uniform2f(this.location, v[0], v[1]);

@@ -5,14 +5,14 @@ import { GL } from "fine/gl/constants/GL";
 import { Camera } from "fine/engine/camera/Camera";
 import { Perspective } from "fine/engine/camera/Perspective";
 import { Circle } from "./circle";
-import { Keyboard } from "fine/io/Keyboard"
+import { System } from "fine/engine/System"
 import { Cylinder } from "./cylinder";
 
 let $canvas: HTMLCanvasElement
 let rootTransform: Transform
 let state: State
 let camera: Camera
-let keyboard: Keyboard
+let system: System
 const circles: Circle[] = new Array(10)
 let time: number = 0
 let deltaTime: number = 0
@@ -53,56 +53,56 @@ function render( gl: GLContext ) {
 }
 
 function update() {
-  if (keyboard.keydown("ArrowLeft")) {
-    circles[0].transform.translate(-1 * deltaTime, 0, 0)
-    if (dir[0] != -1) {
-      dir[0] = -1
-      z[1] = -1
-      ztime = 0
-    }
-  }
-  else if (keyboard.keydown("ArrowRight")) {
-    circles[0].transform.translate(1 * deltaTime, 0, 0)
-    if (dir[0] != 1) {
-      dir[0] = 1
-      z[1] = -1
-      ztime = 0
-    }
-  }
-  if (keyboard.keydown("ArrowUp")) {
-    circles[0].transform.translate(0, 1 * deltaTime, 0)
-    if (dir[1] != 1) {
-      dir[1] = 1
-      z[1] = -1
-      ztime = 0
-    }
-  }
-  else if (keyboard.keydown("ArrowDown")) {
-    circles[0].transform.translate(0, -1 * deltaTime, 0)
-    if (dir[1] != -1) {
-      dir[1] = -1
-      z[1] = -1
-      ztime = 0
-    }
-  }
+  // if (keyboard.keydown("ArrowLeft")) {
+  //   circles[0].transform.translate(-1 * deltaTime, 0, 0)
+  //   if (dir[0] != -1) {
+  //     dir[0] = -1
+  //     z[1] = -1
+  //     ztime = 0
+  //   }
+  // }
+  // else if (keyboard.keydown("ArrowRight")) {
+  //   circles[0].transform.translate(1 * deltaTime, 0, 0)
+  //   if (dir[0] != 1) {
+  //     dir[0] = 1
+  //     z[1] = -1
+  //     ztime = 0
+  //   }
+  // }
+  // if (keyboard.keydown("ArrowUp")) {
+  //   circles[0].transform.translate(0, 1 * deltaTime, 0)
+  //   if (dir[1] != 1) {
+  //     dir[1] = 1
+  //     z[1] = -1
+  //     ztime = 0
+  //   }
+  // }
+  // else if (keyboard.keydown("ArrowDown")) {
+  //   circles[0].transform.translate(0, -1 * deltaTime, 0)
+  //   if (dir[1] != -1) {
+  //     dir[1] = -1
+  //     z[1] = -1
+  //     ztime = 0
+  //   }
+  // }
 
-  ztime += deltaTime
-  if (ztime > 1) z[1] = 0
+  // ztime += deltaTime
+  // if (ztime > 1) z[1] = 0
 
-  z[0] += (z[1] - z[0]) * 0.01
-  circles[0].transform.position[2] = -2 + z[0]
-  circles[0].transform.invalidate()
+  // z[0] += (z[1] - z[0]) * 0.01
+  // circles[0].transform.position[2] = -2 + z[0]
+  // circles[0].transform.invalidate()
 
-  for (let i = circles.length-1; i > 0; i--) {
-    const c0 = circles[i]
-    const c1 = circles[i-1]
+  // for (let i = circles.length-1; i > 0; i--) {
+  //   const c0 = circles[i]
+  //   const c1 = circles[i-1]
 
-    c0.transform.translate(
-      (c1.transform.position[0] - c0.transform.position[0]) * 0.05,
-      (c1.transform.position[1] - c0.transform.position[1]) * 0.05,
-      (c1.transform.position[2] - c0.transform.position[2]) * 0.05,
-    )
-  }
+  //   c0.transform.translate(
+  //     (c1.transform.position[0] - c0.transform.position[0]) * 0.05,
+  //     (c1.transform.position[1] - c0.transform.position[1]) * 0.05,
+  //     (c1.transform.position[2] - c0.transform.position[2]) * 0.05,
+  //   )
+  // }
 }
 
 function resize() {
@@ -121,9 +121,10 @@ function main() {
   state = new State(gl)
 
   window.addEventListener('resize', resize)
-z[1] = -1
-  keyboard = new Keyboard()
-  keyboard.debug = false
+  z[1] = -1
+
+  system = new System()
+  system.inputs.enable(window)
 
   rootTransform = new Transform()
 

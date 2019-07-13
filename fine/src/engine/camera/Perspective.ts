@@ -1,5 +1,6 @@
 import { Lens } from "./Lens";
 import { mat4 } from "gl-matrix";
+import { DEG2RAD } from "lol/js/math"
 
 export class Perspective extends Lens {
 
@@ -49,7 +50,7 @@ export class Perspective extends Lens {
 
   protected _updateProjection() {
     if (this.invalidProjection) {
-      mat4.perspective( this.projection, this._fovy, this._aspect, this._near, this._far )
+      mat4.perspective( this.projection, this._fovy * DEG2RAD, this._aspect, this._near, this._far )
       this.invalidProjection = false;
     }
   }

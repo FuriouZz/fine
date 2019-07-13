@@ -49,4 +49,16 @@ export class Geometry {
     }
   }
 
+  dispose() {
+    for (let i = 0; i < this.buffers.length; i++) {
+      const buffer = this.buffers[i];
+      buffer.dispose()
+    }
+
+    if (this.indices) this.indices.dispose()
+
+    this.buffers = []
+    this.indices = null
+  }
+
 }

@@ -12,7 +12,7 @@ export class TouchInput {
         this.down = new Dispatcher();
         this.pressed = new Dispatcher();
         this.move = new Dispatcher();
-        bind(this, 'onTouch', 'onTouches');
+        bind(this, '_onTouch', '_onTouches');
     }
     enable($el) {
         $el.addEventListener('touchstart', this._onTouches);
