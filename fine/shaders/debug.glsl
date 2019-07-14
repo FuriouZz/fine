@@ -9,7 +9,7 @@ uniform mat4 uMVPMatrix;
 uniform mat4 uWorldMatrix;
 
 void main() {
-  vColor = vec4(1.0, 0.0, 0.0, 1.0);
+  vColor = {{ color }};
   gl_Position = uMVPMatrix * vec4(position, 1.0);
 }
 
