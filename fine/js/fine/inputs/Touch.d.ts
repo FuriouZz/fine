@@ -1,5 +1,5 @@
 import { Dispatcher } from "../utils/Dispatcher";
-interface IKey {
+export interface TouchKey {
     identifier: number;
     down: boolean;
     up: boolean;
@@ -12,18 +12,17 @@ export declare class TouchInput {
     private _keys;
     private width;
     private height;
-    up: Dispatcher<IKey>;
-    down: Dispatcher<IKey>;
-    pressed: Dispatcher<IKey>;
-    move: Dispatcher<IKey>;
+    up: Dispatcher<TouchKey>;
+    down: Dispatcher<TouchKey>;
+    pressed: Dispatcher<TouchKey>;
+    move: Dispatcher<TouchKey>;
     constructor();
     enable($el: Element | Window): void;
     disable($el: Element | Window): void;
-    getKey(identifier: number): IKey;
+    getKey(identifier: number): TouchKey;
     private _onTouches;
     private _onTouch;
     update(): void;
     resize(width: number, height: number): void;
-    computeNormalizedPosition(key: IKey): void;
+    computeNormalizedPosition(key: TouchKey): void;
 }
-export {};

@@ -117,8 +117,11 @@ export var Key;
     Key[Key["NUMPAD_DOT"] = 110] = "NUMPAD_DOT";
     Key[Key["NUMPAD_DIV"] = 111] = "NUMPAD_DIV";
     Key[Key["MOUSE_LEFT"] = 0] = "MOUSE_LEFT";
-    Key[Key["MOUSE_RIGHT"] = 1] = "MOUSE_RIGHT";
-    Key[Key["MOUSE_MIDDLE"] = 2] = "MOUSE_MIDDLE";
+    /* The opposite on the web */
+    // MOUSE_RIGHT      = 1,
+    // MOUSE_MIDDLE     = 2,
+    Key[Key["MOUSE_RIGHT"] = 2] = "MOUSE_RIGHT";
+    Key[Key["MOUSE_MIDDLE"] = 1] = "MOUSE_MIDDLE";
     Key[Key["MOUSE_BACK"] = 3] = "MOUSE_BACK";
     Key[Key["MOUSE_FORWARD"] = 4] = "MOUSE_FORWARD";
     Key[Key["MOUSE_WHEEL_UP"] = 5] = "MOUSE_WHEEL_UP";

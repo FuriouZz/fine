@@ -3,6 +3,7 @@ import { Key } from "./Key";
 import { Dispatcher } from "../utils/Dispatcher";
 import { List } from "lol/js/list";
 import { toIterable } from "lol/js/list/utils";
+import { vec2 } from "gl-matrix";
 export class MouseInput {
     constructor() {
         this._downPool = new List();
@@ -10,8 +11,8 @@ export class MouseInput {
         this.width = 1;
         this.height = 1;
         this.position = {
-            pixels: new Float32Array([0, 0]),
-            normalized: new Float32Array([0, 0])
+            pixels: vec2.fromValues(0, 0),
+            normalized: vec2.fromValues(0, 0)
         };
         this.up = new Dispatcher();
         this.down = new Dispatcher();

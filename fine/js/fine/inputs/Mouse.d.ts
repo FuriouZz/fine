@@ -1,13 +1,14 @@
 import { Key } from "./Key";
 import { Dispatcher } from "../utils/Dispatcher";
-interface IKey {
+import { vec2 } from "gl-matrix";
+export interface MouseKey {
     code: Key;
     key: string;
     down: boolean;
     up: boolean;
     pressed: boolean;
-    pixels: Float32Array;
-    normalized: Float32Array;
+    pixels: vec2;
+    normalized: vec2;
 }
 export declare class MouseInput {
     private _downPool;
@@ -15,20 +16,19 @@ export declare class MouseInput {
     private width;
     private height;
     position: {
-        pixels: Float32Array;
-        normalized: Float32Array;
+        pixels: vec2;
+        normalized: vec2;
     };
-    up: Dispatcher<IKey>;
-    down: Dispatcher<IKey>;
-    pressed: Dispatcher<IKey>;
-    move: Dispatcher<IKey>;
+    up: Dispatcher<MouseKey>;
+    down: Dispatcher<MouseKey>;
+    pressed: Dispatcher<MouseKey>;
+    move: Dispatcher<MouseKey>;
     constructor();
     enable($el: Element | Window): void;
     disable($el: Element | Window): void;
-    getKey(key: Key): IKey;
+    getKey(key: Key): MouseKey;
     private _onMouse;
     update(): void;
     resize(width: number, height: number): void;
     computeNormalizedPosition(): void;
 }
-export {};
