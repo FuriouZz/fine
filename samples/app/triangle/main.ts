@@ -23,10 +23,10 @@ function render( gl: WebGLRenderingContext ) {
   gl.clearColor(0, 0, 0, 1)
   gl.clear( GLClear.COLOR_BUFFER )
 
-  quat.rotateY(transform.rotation, transform.rotation, 0.01)
+  transform.rotateY(0.01)
   transform.invalidate()
 
-  rootTransform.position[0] = Math.cos( Date.now() * 0.001 ) * 0.5
+  rootTransform.localPosition[0] = Math.cos( Date.now() * 0.001 ) * 0.5
   rootTransform.invalidate()
   rootTransform.updateWorldMatrix()
 

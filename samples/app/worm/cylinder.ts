@@ -97,7 +97,7 @@ export class Cylinder {
   }
 
   MVP(camera: Camera) {
-    camera.model_view_projection_matrix( this.transform.getMatrix(), M4 )
+    camera.model_view_projection_matrix( this.transform.getWorldMatrix(), M4 )
     mat4.copy( M42, camera.viewProjection )
   }
 

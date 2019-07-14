@@ -42,11 +42,11 @@ function render( gl: GLContext ) {
     circle.MVP(camera)
     circle.render()
   }
-  cylinder.transform.position[1] = -0.5
+  cylinder.transform.localPosition[1] = -0.5
   cylinder.transform.invalidate()
   cylinder.transform.rotateY(0.25 * deltaTime)
   cylinder.MVP(camera)
-  cylinder.Anchors( circles.map((c) => c.transform.position) )
+  cylinder.Anchors( circles.map((c) => c.transform.localPosition) )
   cylinder.render()
 
   window.requestAnimationFrame(() => render(gl))
@@ -90,7 +90,7 @@ function update() {
   // if (ztime > 1) z[1] = 0
 
   // z[0] += (z[1] - z[0]) * 0.01
-  // circles[0].transform.position[2] = -2 + z[0]
+  // circles[0].transform.localPosition[2] = -2 + z[0]
   // circles[0].transform.invalidate()
 
   // for (let i = circles.length-1; i > 0; i--) {
@@ -98,9 +98,9 @@ function update() {
   //   const c1 = circles[i-1]
 
   //   c0.transform.translate(
-  //     (c1.transform.position[0] - c0.transform.position[0]) * 0.05,
-  //     (c1.transform.position[1] - c0.transform.position[1]) * 0.05,
-  //     (c1.transform.position[2] - c0.transform.position[2]) * 0.05,
+  //     (c1.transform.localPosition[0] - c0.transform.localPosition[0]) * 0.05,
+  //     (c1.transform.localPosition[1] - c0.transform.localPosition[1]) * 0.05,
+  //     (c1.transform.localPosition[2] - c0.transform.localPosition[2]) * 0.05,
   //   )
   // }
 }
@@ -129,21 +129,21 @@ function main() {
   rootTransform = new Transform()
 
   camera = Camera.Perspective(90, $canvas.width/$canvas.height, 0.1, 100)
-  camera.transform.position[2] = -1
+  camera.transform.localPosition[2] = -1
   camera.transform.invalidate()
   rootTransform.addChild( camera.transform )
 
   for (let i = 0; i < 10; i++) {
     const circle = new Circle(gl, state)
     circle.transform.translate(i*1, 0, -2)
-    circle.transform.setScale(0.1, 0.1, 0.1)
+    circle.transform.scale(0.1, 0.1, 0.1)
     rootTransform.addChild( circle.transform )
     circles[i] = circle
   }
 
   cylinder = new Cylinder(state)
   cylinder.transform.translate(0, 0, -2)
-  cylinder.transform.setScale(0.5, 0.5, 0.5)
+  cylinder.transform.scale(0.5, 0.5, 0.5)
   // cylinder.transform.rotateY(1.5)
   rootTransform.addChild( cylinder.transform )
 

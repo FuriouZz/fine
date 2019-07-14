@@ -68,7 +68,7 @@ export class Circle {
   }
 
   MVP(camera: Camera) {
-    camera.model_view_projection_matrix( this.transform.getMatrix(), M4 )
+    camera.model_view_projection_matrix( this.transform.getWorldMatrix(), M4 )
   }
 
   render() {
