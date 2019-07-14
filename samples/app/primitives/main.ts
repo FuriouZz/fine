@@ -8,14 +8,12 @@ import { PrimitiveMesh } from "fine/gl/primitives/Primitive";
 import { Perspective } from "fine/engine/camera/Perspective";
 import { Mesh } from "fine/gl/Mesh";
 import { Debug } from "fine/gl/debug/Debug"
-import { Key } from "fine/inputs/Key";
 
 let rootTransform: Transform
 let state: State
 let camera: Camera
 let system: System
 let prim: Mesh
-let speed = 0
 
 function render( gl: GLContext ) {
   gl.bindFramebuffer(GL.FRAMEBUFFER, null)
@@ -33,13 +31,6 @@ function render( gl: GLContext ) {
 
   rootTransform.updateWorldMatrix()
 
-  if (system.inputs.key.getKey(Key.UP).down) {
-    prim.transform.rotateX(-system.deltaTime)
-  } else if (system.inputs.key.getKey(Key.DOWN).down) {
-    prim.transform.rotateX(system.deltaTime)
-  }
-
-  prim.transform.translate(speed * system.deltaTime, 0, 0)
   prim.computeModelViewProjection( camera )
   prim.render()
 
@@ -52,8 +43,8 @@ async function main() {
   state = new State(gl)
   rootTransform = new Transform()
 
-  camera = Camera.Perspective(30, $canvas.width/$canvas.height, 0.1, 100)
-  camera.transform.position[2] = 10
+  camera = Camera.Perspective(90, $canvas.width/$canvas.height, 0.1, 100)
+  camera.transform.position[2] = 2
   camera.transform.invalidate()
   rootTransform.addChild( camera.transform )
 
@@ -63,6 +54,8 @@ async function main() {
   prim = PrimitiveMesh.sphere(pipeline, 1, 10, 10)
   prim.geometry.drawMode = GLPrimitive.LINES
   prim.geometry.drawMode = GLPrimitive.TRIANGLES
+  prim.transform.rotateX( Math.PI * 0.5 )
+  // prim.transform.rotateY( Math.PI * 0.5 )
   rootTransform.addChild( prim.transform )
 
   system = new System()
@@ -82,20 +75,6 @@ async function main() {
   })
 
   system.onResize()
-
-  system.inputs.key.down.on((key) => {
-    if (key.code == Key.LEFT) {
-      speed -= 0.1
-    }
-    else if (key.code == Key.RIGHT) {
-      speed += 0.1
-    }
-  })
-  system.inputs.key.up.on((key) => {
-    if (key.code == Key.LEFT || key.code == Key.RIGHT) {
-      speed = 0
-    }
-  })
 
   system.render.on(() => render(gl))
 }

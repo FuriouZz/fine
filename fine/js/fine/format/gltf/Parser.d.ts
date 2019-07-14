@@ -38,7 +38,7 @@ export declare class Parser {
     parseCamera(rawCamera: any, raw: any, camera: any): any;
     parseGeometry(rawGeometry: any, raw: any): IGeometryData;
     parseMaterial(rawMaterial: any, raw: any): IMaterialData;
-    getBuffer(rawGeometry: any, raw: any, index: any): Uint8Array | Uint16Array | Float32Array;
+    getBuffer(rawGeometry: any, raw: any, index: any): Float32Array | Uint16Array | Uint8Array;
     parseGLB(buffer: any): {
         type: string;
         bin: any;

@@ -18,7 +18,6 @@ export class Debug {
             pipeline.fragment_shader = shader.get('Fragment');
             pipeline.depthTest = true;
             pipeline.cullFace = true;
-            pipeline.cullFaceMode = 1028 /* FRONT */;
             return pipeline;
         });
     }

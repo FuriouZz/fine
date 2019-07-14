@@ -16,7 +16,6 @@ export class Debug {
 
     pipeline.depthTest = true
     pipeline.cullFace = true
-    pipeline.cullFaceMode = GL.FRONT
 
     return pipeline
   }
