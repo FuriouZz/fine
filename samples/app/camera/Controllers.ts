@@ -1,9 +1,5 @@
-import { mat4, quat, vec3, vec2 } from "gl-matrix";
+import { mat4, quat, vec3 } from "gl-matrix";
 import { Transform } from "fine/engine/Transform";
-import { Inputs } from "fine/inputs/Inputs";
-import { MouseKey } from "fine/inputs/Mouse";
-import { Key } from "fine/inputs/Key";
-import { KeyboardKey } from "fine/inputs/Keyboard";
 
 export class Orbit {
 
@@ -36,8 +32,9 @@ export class Orbit {
     this.transform.setMatrix(this.backup_matrix)
 
     // Compute x axis after ref rotation (TODO: Need enhancement)
-    vec3.set(Orbit.V3, 1, 0, 0)
-    vec3.transformQuat(Orbit.V3, Orbit.V3, this.backup_rotation)
+    // vec3.set(Orbit.V3, 1, 0, 0)
+    // vec3.transformQuat(Orbit.V3, Orbit.V3, this.backup_rotation)
+    this.transform.getRight( Orbit.V3 )
 
     // Compute rotation
     mat4.identity(Orbit.M4)
