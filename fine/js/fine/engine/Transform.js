@@ -107,6 +107,7 @@ export class Transform {
         }
     }
     _updateWorldMatrix() {
+        const parentHadInvalidWorldMatrix = this.invalidWorldMatrix;
         if (this.invalidWorldMatrix) {
             if (this.parent == null) {
                 mat4.copy(this.worldMatrix, this.matrix);
@@ -118,6 +119,7 @@ export class Transform {
         }
         for (let i = 0; i < this.children.length; i++) {
             const child = this.children[i];
+            child.invalidWorldMatrix = child.invalidWorldMatrix || parentHadInvalidWorldMatrix;
             child.updateMatrix();
             child._updateWorldMatrix();
         }
@@ -125,11 +127,6 @@ export class Transform {
     invalidate() {
         this.invalidMatrix = true;
         this.invalidWorldMatrix = true;
-        // Invalidate children
-        for (let i = 0; i < this.children.length; i++) {
-            const child = this.children[i];
-            child.invalidate();
-        }
     }
     addChild(t) {
         if (t.parent != null) {
