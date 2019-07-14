@@ -4,7 +4,7 @@ import { Dispatcher } from "../utils/Dispatcher"
 import { List } from "lol/js/list";
 import { toIterable } from "lol/js/list/utils";
 
-interface IKey {
+export interface TouchKey {
   identifier: number,
   down: boolean,
   up: boolean,
@@ -16,14 +16,14 @@ interface IKey {
 export class TouchInput {
 
   private _downPool = new List<Key>()
-  private _keys: Record<number, IKey> = {}
+  private _keys: Record<number, TouchKey> = {}
   private width = 1
   private height = 1
 
-  up = new Dispatcher<IKey>()
-  down = new Dispatcher<IKey>()
-  pressed = new Dispatcher<IKey>()
-  move = new Dispatcher<IKey>()
+  up = new Dispatcher<TouchKey>()
+  down = new Dispatcher<TouchKey>()
+  pressed = new Dispatcher<TouchKey>()
+  move = new Dispatcher<TouchKey>()
 
   constructor() {
     bind(this, '_onTouch', '_onTouches')
@@ -60,7 +60,7 @@ export class TouchInput {
   }
 
   private _onTouch(e: TouchEvent, _touch: Touch) {
-    const touch: IKey = this.getKey(_touch.identifier)
+    const touch: TouchKey = this.getKey(_touch.identifier)
 
     touch.pixels[0] = _touch.clientX
     touch.pixels[1] = _touch.clientY
@@ -104,7 +104,7 @@ export class TouchInput {
     this.height = height || 1
   }
 
-  computeNormalizedPosition(key: IKey) {
+  computeNormalizedPosition(key: TouchKey) {
     key.normalized[0] = key.pixels[0] / this.width
     key.normalized[1] = key.pixels[1] / this.height
   }

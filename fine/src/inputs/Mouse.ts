@@ -3,33 +3,34 @@ import { Key } from "./Key";
 import { Dispatcher } from "../utils/Dispatcher"
 import { List } from "lol/js/list";
 import { toIterable } from "lol/js/list/utils";
+import { vec2 } from "gl-matrix";
 
-interface IKey {
+export interface MouseKey {
   code: Key,
   key: string,
   down: boolean,
   up: boolean,
   pressed: boolean,
-  pixels: Float32Array,
-  normalized: Float32Array
+  pixels: vec2,
+  normalized: vec2
 }
 
 export class MouseInput {
 
   private _downPool = new List<Key>()
-  private _keys: Record<number, IKey> = {}
+  private _keys: Record<number, MouseKey> = {}
   private width = 1
   private height = 1
 
   position = {
-    pixels: new Float32Array([0, 0]),
-    normalized: new Float32Array([0, 0])
+    pixels: vec2.fromValues(0, 0),
+    normalized: vec2.fromValues(0, 0)
   }
 
-  up = new Dispatcher<IKey>()
-  down = new Dispatcher<IKey>()
-  pressed = new Dispatcher<IKey>()
-  move = new Dispatcher<IKey>()
+  up = new Dispatcher<MouseKey>()
+  down = new Dispatcher<MouseKey>()
+  pressed = new Dispatcher<MouseKey>()
+  move = new Dispatcher<MouseKey>()
 
   constructor() {
     bind(this, '_onMouse')
@@ -60,7 +61,7 @@ export class MouseInput {
   }
 
   private _onMouse(e: MouseEvent) {
-    const mouse: IKey = this.getKey(e.button)
+    const mouse: MouseKey = this.getKey(e.button)
 
     this.position.pixels[0] = e.clientX
     this.position.pixels[1] = e.clientY

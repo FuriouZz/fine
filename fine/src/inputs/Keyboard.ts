@@ -4,7 +4,7 @@ import { Dispatcher } from "../utils/Dispatcher"
 import { List } from "lol/js/list";
 import { toIterable } from "lol/js/list/utils";
 
-interface IKey {
+export interface KeyboardKey {
   code: Key,
   key: string,
   down: boolean,
@@ -15,11 +15,11 @@ interface IKey {
 export class KeyboardInput {
 
   private _downPool = new List<Key>()
-  private _keys: Record<number, IKey> = {}
+  private _keys: Record<number, KeyboardKey> = {}
 
-  up = new Dispatcher<IKey>()
-  down = new Dispatcher<IKey>()
-  pressed = new Dispatcher<IKey>()
+  up = new Dispatcher<KeyboardKey>()
+  down = new Dispatcher<KeyboardKey>()
+  pressed = new Dispatcher<KeyboardKey>()
 
   constructor() {
     bind(this, '_onKey')
@@ -46,7 +46,7 @@ export class KeyboardInput {
   }
 
   private _onKey(e: KeyboardEvent) {
-    const key: IKey = this.getKey(e.keyCode)
+    const key: KeyboardKey = this.getKey(e.keyCode)
 
     if (e.type == "keyup") {
       key.up = true
