@@ -59,6 +59,24 @@ export class Transform {
     this.invalidate()
   }
 
+  getUp( out: vec3 ) {
+    vec3.set(out, 0, 1, 0)
+    mat4.getRotation( TMP_QUAT, this.worldMatrix )
+    vec3.transformQuat(out, out, TMP_QUAT)
+  }
+
+  getForward( out: vec3 ) {
+    vec3.set(out, 0, 0, -1)
+    mat4.getRotation( TMP_QUAT, this.worldMatrix )
+    vec3.transformQuat(out, out, TMP_QUAT)
+  }
+
+  getRight( out: vec3 ) {
+    vec3.set(out, 1, 0, 0)
+    mat4.getRotation( TMP_QUAT, this.worldMatrix )
+    vec3.transformQuat(out, out, TMP_QUAT)
+  }
+
   decompose() {
     mat4.getRotation( this.rotation, this.matrix )
     mat4.getScaling( this.scale, this.matrix )
