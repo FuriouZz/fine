@@ -19,5 +19,7 @@ export declare class Pipeline extends StateConfig {
     compile(): void;
     private get_locations;
     use(): void;
+    applyState(): void;
+    popState(): void;
     dispose(): void;
 }

@@ -8,16 +8,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { Pipeline } from "../Pipeline";
 import { Shader } from "../../engine/Shader";
+import { Color } from "../../engine/Color";
 export class Debug {
-    static pipeline(state, type = "Color") {
+    static pipeline(state, type = "Color", color = Color.Red()) {
         return __awaiter(this, void 0, void 0, function* () {
             const pipeline = new Pipeline(state);
             const resource = yield Shader.load('debug.glsl');
             const shader = resource.data;
-            pipeline.vertex_shader = shader.get('Vertex.' + type);
+            pipeline.vertex_shader = shader.get('Vertex.' + type, { color: Color.to_vec4_glsl(color) });
             pipeline.fragment_shader = shader.get('Fragment');
-            pipeline.depthTest = true;
             pipeline.cullFace = true;
+            pipeline.depthTest = true;
+            pipeline.depthWrite = true;
             return pipeline;
         });
     }

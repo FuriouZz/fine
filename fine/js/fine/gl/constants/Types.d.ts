@@ -47,7 +47,6 @@ export declare const enum GLBuffer {
     ELEMENTS = 34963
 }
 export declare const enum GLCulling {
-    CULL_FACE = 2884,
     FRONT = 1028,
     BACK = 1029,
     FRONT_AND_BACK = 1032
@@ -78,4 +77,27 @@ export declare const enum GLTextureWrap {
     MIRROR = 33648,
     CLAMP = 33071,
     REPEAT = 10497
+}
+export declare const enum GLTest {
+    NEVER = 512,
+    LESS = 513,
+    EQUAL = 514,
+    LEQUAL = 515,
+    GREATER = 516,
+    NOTEQUAL = 517,
+    GEQUAL = 518,
+    ALWAYS = 519
+}
+export declare const enum GLStencilActions {
+    KEEP = 7680,
+    REPLACE = 7681,
+    INCR = 7682,
+    DECR = 7683,
+    INVERT = 5386,
+    INCR_WRAP = 34055,
+    DECR_WRAP = 34056
+}
+export declare const enum GLFrontFaceDirection {
+    Clockwise = 2304,
+    CounterClockwise = 2305
 }
