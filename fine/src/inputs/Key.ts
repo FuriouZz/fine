@@ -125,8 +125,13 @@ export enum Key {
   NUMPAD_DIV   = 111,
 
   MOUSE_LEFT       = 0,
-  MOUSE_RIGHT      = 1,
-  MOUSE_MIDDLE     = 2,
+
+  /* The opposite on the web */
+  // MOUSE_RIGHT      = 1,
+  // MOUSE_MIDDLE     = 2,
+  MOUSE_RIGHT      = 2,
+  MOUSE_MIDDLE     = 1,
+
   MOUSE_BACK       = 3,
   MOUSE_FORWARD    = 4,
   MOUSE_WHEEL_UP   = 5,
