@@ -87,8 +87,14 @@ export class Pipeline extends StateConfig {
     if (!this.compiled) this.compile()
     this.gl.useProgram(this.program)
     this.onUpdateUniforms.dispatch(this.uniforms)
+  }
+
+  applyState() {
     this.state.apply( this ) // Apply state
-    // this.state.apply() // Reset state
+  }
+
+  popState() {
+    this.state.apply() // Reset state
   }
 
   dispose() {

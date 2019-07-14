@@ -51,14 +51,13 @@ export const enum GLBlendEq {
 
 export const enum GLBuffer {
   ARRAY = GL.ARRAY_BUFFER,
-  ELEMENTS = GL.ELEMENT_ARRAY_BUFFER
+  ELEMENTS = GL.ELEMENT_ARRAY_BUFFER,
 }
 
 export const enum GLCulling {
-  CULL_FACE = GL.CULL_FACE,
   FRONT = GL.FRONT,
   BACK = GL.BACK,
-  FRONT_AND_BACK = GL.FRONT_AND_BACK
+  FRONT_AND_BACK = GL.FRONT_AND_BACK,
 }
 
 export const enum GLType {
@@ -89,5 +88,31 @@ export const enum GLShaderType {
 export const enum GLTextureWrap {
   MIRROR = GL.MIRRORED_REPEAT,
   CLAMP = GL.CLAMP_TO_EDGE,
-  REPEAT = GL.REPEAT
+  REPEAT = GL.REPEAT,
+}
+
+export const enum GLTest {
+  NEVER = GL.NEVER,
+  LESS = GL.LESS,
+  EQUAL = GL.EQUAL,
+  LEQUAL = GL.LEQUAL,
+  GREATER = GL.GREATER,
+  NOTEQUAL = GL.NOTEQUAL,
+  GEQUAL = GL.GEQUAL,
+  ALWAYS = GL.ALWAYS,
+}
+
+export const enum GLStencilActions {
+  KEEP = GL.KEEP,
+  REPLACE = GL.REPLACE,
+  INCR = GL.INCR,
+  DECR = GL.DECR,
+  INVERT = GL.INVERT,
+  INCR_WRAP = GL.INCR_WRAP,
+  DECR_WRAP = GL.DECR_WRAP,
+}
+
+export const enum GLFrontFaceDirection {
+  Clockwise = GL.CW,
+  CounterClockwise = GL.CCW
 }
