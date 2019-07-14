@@ -132,8 +132,14 @@ export class Transform {
   }
 
   invalidate() {
-    this.invalidMatrix = true;
-    this.invalidWorldMatrix = true;
+    this.invalidMatrix = true
+    this.invalidWorldMatrix = true
+
+    // Invalidate children
+    for (let i = 0; i < this.children.length; i++) {
+      const child = this.children[i]
+      child.invalidate()
+    }
   }
 
   addChild( t: Transform ) {
