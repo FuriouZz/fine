@@ -1,61 +1,63 @@
 import { mat4, quat, vec3 } from "gl-matrix";
 
+const TMP_QUAT = quat.create()
+
 export class Transform {
 
-  scale = vec3.set(vec3.create(), 1, 1, 1)
-  position = vec3.set(vec3.create(), 0, 0, 0)
-  rotation = quat.identity(quat.create())
+  localScale = vec3.set(vec3.create(), 1, 1, 1)
+  localPosition = vec3.set(vec3.create(), 0, 0, 0)
+  localRotation = quat.identity(quat.create())
 
-  parent: Transform;
-  children = new Array<Transform>();
-  object: Object;
+  parent: Transform
+  children = new Array<Transform>()
+  name: string
 
-  private matrix = mat4.identity(mat4.create());
-  private worldMatrix = mat4.identity(mat4.create());
+  private matrix = mat4.identity(mat4.create())
+  private worldMatrix = mat4.identity(mat4.create())
 
-  private invalidWorldMatrix = true;
-  private invalidMatrix = true;
+  private invalidWorldMatrix = true
+  private invalidMatrix = true
 
   constructor() {}
 
-  setScale(x = this.scale[0], y = this.scale[1], z = this.scale[2]) {
-    this.scale[0] = x
-    this.scale[1] = y
-    this.scale[2] = z
-    this.invalidate()
-  }
-
-  setPosition(x = this.position[0], y = this.position[1], z = this.position[2]) {
-    this.position[0] = x
-    this.position[1] = y
-    this.position[2] = z
-    this.invalidate()
-  }
-
-  setRotation(axis: vec3 | number[], radian: number) {
-    quat.setAxisAngle(this.rotation, axis, radian)
+  scale(x = this.localScale[0], y = this.localScale[1], z = this.localScale[2]) {
+    this.localScale[0] = x
+    this.localScale[1] = y
+    this.localScale[2] = z
     this.invalidate()
   }
 
   rotateX(radian: number) {
-    quat.rotateX(this.rotation, this.rotation, radian)
+    quat.rotateX(this.localRotation, this.localRotation, radian)
     this.invalidate()
   }
 
   rotateY(radian: number) {
-    quat.rotateY(this.rotation, this.rotation, radian)
+    quat.rotateY(this.localRotation, this.localRotation, radian)
     this.invalidate()
   }
 
   rotateZ(radian: number) {
-    quat.rotateZ(this.rotation, this.rotation, radian)
+    quat.rotateZ(this.localRotation, this.localRotation, radian)
     this.invalidate()
   }
 
   translate(x: number, y: number, z: number) {
-    this.position[0] = this.position[0] + x
-    this.position[1] = this.position[1] + y
-    this.position[2] = this.position[2] + z
+    this.localPosition[0] = this.localPosition[0] + x
+    this.localPosition[1] = this.localPosition[1] + y
+    this.localPosition[2] = this.localPosition[2] + z
+    this.invalidate()
+  }
+
+  setPosition(x = this.localPosition[0], y = this.localPosition[1], z = this.localPosition[2]) {
+    this.localPosition[0] = x
+    this.localPosition[1] = y
+    this.localPosition[2] = z
+    this.invalidate()
+  }
+
+  setRotation(axis: vec3 | number[], radian: number) {
+    quat.setAxisAngle(this.localRotation, axis, radian)
     this.invalidate()
   }
 
@@ -78,9 +80,9 @@ export class Transform {
   }
 
   decompose() {
-    mat4.getRotation( this.rotation, this.matrix )
-    mat4.getScaling( this.scale, this.matrix )
-    mat4.getTranslation( this.position, this.matrix )
+    mat4.getRotation( this.localRotation, this.matrix )
+    mat4.getScaling( this.localScale, this.matrix )
+    mat4.getTranslation( this.localPosition, this.matrix )
   }
 
   getMatrix() {
@@ -89,45 +91,45 @@ export class Transform {
 
   setMatrix( m: mat4 ) {
     mat4.copy( this.matrix, m )
-    this.decompose();
-    this.invalidWorldMatrix = true;
+    this.decompose()
+    this.invalidWorldMatrix = true
   }
 
   getWorldMatrix() {
-    return this.worldMatrix;
+    return this.worldMatrix
   }
 
   getRoot() {
-    return this.parent == null ? this : this.parent.getRoot();
+    return this.parent == null ? this : this.parent.getRoot()
   }
 
   getInvalidParent() {
-    if (this.parent == null) return null;
+    if (this.parent == null) return null
 
-    var pp = this.parent.getInvalidParent();
-    if (pp != null) return pp;
+    var pp = this.parent.getInvalidParent()
+    if (pp != null) return pp
 
-    if (this.parent.invalidWorldMatrix) return this.parent;
+    if (this.parent.invalidWorldMatrix) return this.parent
 
-    return null;
+    return null
   }
 
   updateMatrix() {
     if (this.invalidMatrix) {
-      mat4.fromRotationTranslationScale( this.matrix, this.rotation, this.position, this.scale )
-      this.invalidMatrix = false;
+      mat4.fromRotationTranslationScale( this.matrix, this.localRotation, this.localPosition, this.localScale )
+      this.invalidMatrix = false
     }
   }
 
   updateWorldMatrix() {
-    var invalidParent = this.getInvalidParent();
+    var invalidParent = this.getInvalidParent()
 
     if (invalidParent == null) {
-        this.updateMatrix();
-        this._updateWorldMatrix();
+        this.updateMatrix()
+        this._updateWorldMatrix()
     } else {
-      invalidParent.updateMatrix();
-      invalidParent._updateWorldMatrix();
+      invalidParent.updateMatrix()
+      invalidParent._updateWorldMatrix()
     }
   }
 
@@ -138,14 +140,13 @@ export class Transform {
       } else {
         mat4.mul( this.worldMatrix, this.parent.worldMatrix, this.matrix )
       }
-
-      this.invalidWorldMatrix = false;
+      this.invalidWorldMatrix = false
     }
 
     for (let i = 0; i < this.children.length; i++) {
-      const child = this.children[i];
-      child.updateMatrix();
-      child._updateWorldMatrix();
+      const child = this.children[i]
+      child.updateMatrix()
+      child._updateWorldMatrix()
     }
   }
 
@@ -162,11 +163,11 @@ export class Transform {
 
   addChild( t: Transform ) {
     if (t.parent != null) {
-      t.parent.removeChild( t );
+      t.parent.removeChild( t )
     }
 
-    t.parent = this;
-    this.children.push( t );
+    t.parent = this
+    this.children.push( t )
   }
 
   removeChild( t: Transform ) {
