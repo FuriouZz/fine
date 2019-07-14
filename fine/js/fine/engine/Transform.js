@@ -1,5 +1,4 @@
 import { mat4, quat, vec3 } from "gl-matrix";
-const M4 = mat4.create();
 export class Transform {
     constructor() {
         this.scale = vec3.set(vec3.create(), 1, 1, 1);
@@ -25,6 +24,7 @@ export class Transform {
     }
     setRotation(axis, radian) {
         quat.setAxisAngle(this.rotation, axis, radian);
+        this.invalidate();
     }
     rotateX(radian) {
         quat.rotateX(this.rotation, this.rotation, radian);
@@ -96,9 +96,7 @@ export class Transform {
                 mat4.copy(this.worldMatrix, this.matrix);
             }
             else {
-                mat4.copy(M4, this.parent.worldMatrix);
-                mat4.mul(M4, M4, this.matrix);
-                mat4.copy(this.worldMatrix, M4);
+                mat4.mul(this.worldMatrix, this.parent.worldMatrix, this.matrix);
             }
             this.invalidWorldMatrix = false;
         }

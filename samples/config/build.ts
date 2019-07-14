@@ -24,10 +24,10 @@ export default async function main(env: WKEnv = { sample: "triangle" }) {
   await libs.fetch()
 
   const entries = pipeline('entries')
-  entries.source.add(`app/${env.sample}`)
-  entries.file.add('**/*.ts', { rename: "#{name}.js" })
-  entries.file.add('**/*.styl', { rename: "#{name}.css" })
-  entries.file.add('**/*.html.ejs', { rename: "#{name}", cache: false })
+  entries.source.add(`app`)
+  entries.file.add(`${env.sample}/**/*.ts`, { rename: "#{name}.js" })
+  entries.file.add(`${env.sample}/**/*.styl`, { rename: "#{name}.css" })
+  entries.file.add(`${env.sample}/**/*.html.ejs`, { rename: "#{name}", cache: false })
   await entries.fetch()
 
   const assets = entries.clone("assets")
@@ -40,7 +40,13 @@ export default async function main(env: WKEnv = { sample: "triangle" }) {
   const config: WKConfig = {
     watch: false,
     compress: false,
-    ejs: {},
+    ejs: {
+      data: {
+        global: {
+          sample: env.sample
+        }
+      }
+    },
     environment: "development",
     entries,
     libs,

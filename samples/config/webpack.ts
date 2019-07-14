@@ -104,17 +104,17 @@ export function plugins(w: Configuration, config: WKConfig) {
 }
 
 export function ejs_helpers(w: Configuration, config: WKConfig) {
-  config.ejs.helpers = {
-    asset_path() {
-      return function (path: string, from?: string) {
-        return config.assets.resolve.path(path, from)
-      }
-    },
+  config.ejs.helpers = config.ejs.helpers || {}
 
-    asset_url() {
-      return function (path: string, from?: string) {
-        return config.assets.resolve.url(path, from)
-      }
+  config.ejs.helpers.asset_path = function() {
+    return function (path: string, from?: string) {
+      return config.assets.resolve.path(path, from)
+    }
+  }
+
+  config.ejs.helpers.asset_url = function() {
+    return function (path: string, from?: string) {
+      return config.assets.resolve.url(path, from)
     }
   }
 }

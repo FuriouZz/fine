@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Fine - <%= title %></title>
-  <link rel="stylesheet" href="<%= asset_url('main.styl') %>">
+  <link rel="stylesheet" href="<%= asset_url(global.sample + '/main.styl') %>">
 </head>
 <body>
   <%= content %>
-  <script src="<%= asset_url('main.ts') %>"></script>
+  <script src="<%= asset_url(global.sample + '/main.ts') %>"></script>
 </body>
 </html>

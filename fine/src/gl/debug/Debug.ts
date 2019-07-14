@@ -5,7 +5,7 @@ import { GL } from "../constants/GL";
 
 export class Debug {
 
-  static async pipeline(state?: State, type: "Color" | "UV" | "Normal" = "Color") {
+  static async pipeline(state?: State, type: "Color" | "UV" | "Normal" | "WorldNormal" = "Color") {
     const pipeline = new Pipeline(state)
 
     const resource = await Shader.load('debug.glsl')

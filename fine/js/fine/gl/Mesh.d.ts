@@ -7,6 +7,7 @@ export declare class Mesh {
     geometry: Geometry;
     pipeline: Pipeline;
     transform: Transform;
+    private _M4;
     constructor(geometry: Geometry, pipeline: Pipeline);
     computeModelViewProjection(camera: Camera): void;
     protected onUpdateUniforms(uniforms: Record<string, Uniform>): void;
