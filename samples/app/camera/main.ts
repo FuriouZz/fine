@@ -8,6 +8,8 @@ import { quat, mat4, vec4, vec3, mat3 } from "gl-matrix";
 import { Color } from "fine/engine/Color";
 import { GL } from "fine/gl/constants/GL";
 
+const M4 = mat4.create()
+
 class CameraSample extends Sample {
 
   prim: Mesh
@@ -17,10 +19,11 @@ class CameraSample extends Sample {
 
   coords = [0, 0]
 
-
-
   position = vec3.create()
-  rotation = [0, 0, 0]
+  rotation = quat.create()
+
+
+  // rotation = [0, 0, 0]
   angle = 0
   matrix = mat4.create()
 
@@ -60,7 +63,7 @@ class CameraSample extends Sample {
     //   this.target.transform.position[2] - this.ref.transform.position[2]
     // )
 
-    const rotation = quat.create()
+    const rotation = mat4.create()
     // quat.rotateZ(rotation, rotation, Math.PI * 0.5)
 
     // this.ref.transform.translate(translation[0], translation[1], translation[2])
@@ -75,79 +78,133 @@ class CameraSample extends Sample {
         this.coords[0] = this.system.inputs.mouse.position.pixels[0]
         this.coords[1] = this.system.inputs.mouse.position.pixels[1]
         vec3.copy(this.position, this.ref.transform.localPosition)
+        quat.copy(this.rotation, this.ref.transform.localRotation)
+        mat4.copy(this.matrix, this.ref.transform.getMatrix())
+      }
+    })
+
+    mouse.up.on((key) => {
+      if (key.code == Key.MOUSE_RIGHT) {
+        console.log("UP", this.ref.transform.localRotation)
       }
     })
 
     mouse.down.on((key) => {
       if (key.code == Key.MOUSE_RIGHT) {
 
+        // Reset matrix
+        this.ref.transform.setMatrix(this.matrix)
+
+        // Compute x axis after ref rotation
+        vec3.set(axisX, 1, 0, 0)
+        vec3.transformQuat(axisX, axisX, this.rotation)
+
+        // Compute rotation
+        mat4.identity(rotation)
+        mat4.rotate(rotation, rotation, (this.coords[1] - mouse.position.pixels[1]) * 0.01, axisX)
+        mat4.rotateY(rotation, rotation, (this.coords[0] - mouse.position.pixels[0]) * 0.01)
+
+        // Apply rotation to the ref
+        mat4.multiply(M4, this.matrix, rotation)
+        this.ref.transform.setMatrix(M4)
+
+
+        // ORBIT
         vec3.set(
           translation,
           this.target.transform.localPosition[0] - this.position[0],
           this.target.transform.localPosition[1] - this.position[1],
           this.target.transform.localPosition[2] - this.position[2]
         )
-
-        this.ref.transform.getUp(axisY)
-        this.ref.transform.getRight(axisX)
-        this.ref.transform.getForward( axisZ )
-
-        // const axisX = vec3.create()
-        // const up = [0, 1, 0]
-        // const axisY = vec3.create()
-        // const axisZ = vec3.create()
-
-        // this.ref.transform.getUp( axisY )
-        // vec3.cross(axisX, axisZ, up)
-        // vec3.normalize(axisX, axisX)
-
-        // console.log(axisY);
-
-        // vec3.set(
-        //   axisX,
-        //   1 - Math.abs(axis[0]),
-        //   1 - Math.abs(axis[1]),
-        //   1 - Math.abs(axis[2]),
-        // )
-        // vec3.set(axisY, 0, axisX[1], 0)
-        // vec3.set(axisZ, 0, 0, axisX[2])
-        // vec3.set(axisX, axisX[0], 0, 0)
-        // // vec3.cross(axisX, axisX, axis)
-        // // vec3.cross(axisX, axisY, axisZ)
-
-        vec3.copy(this.ref.transform.localPosition, this.position)
         this.ref.transform.translate(translation[0], translation[1], translation[2])
 
-        const m = mat4.create()
-        mat4.identity(m)
-        mat4.rotate(m, m, (this.coords[0] - mouse.position.pixels[0]) * 0.01, axisY)
+        vec3.transformMat4(translation, translation, rotation)
 
-        // quat.setAxisAngle(rotation, axisX, (this.coords[1] - mouse.position.pixels[1]) * 0.01)
-        // quat.rotateY(rotation, rotation, (this.coords[0] - mouse.position.pixels[0]) * 0.01)
+        vec3.negate(translation, translation)
+        this.ref.transform.translate(translation[0], translation[1], translation[2])
 
-        // this.ref.transform.setRotation(axisX, (this.coords[1] - mouse.position.pixels[1]) * 0.01)
-        this.ref.transform.rotateY((this.coords[0] - mouse.position.pixels[0]) * 0.01)
-
-        // mat4.rotateY(m, m, (this.coords[0] - mouse.position.pixels[0]) * 0.01)
-        // mat4.rotate(m, m, (this.coords[1] - mouse.position.pixels[1]) * 0.01, axisX)
-
-        // mat4.rotate(m, m, (this.coords[0] - mouse.position.pixels[0]) * 0.01, axisY)
-        // mat4.rotate(m, m, (this.coords[1] - mouse.position.pixels[1]) * 0.01, axisZ)
+        // this.ref.transform.getUp(axisY)
+        // this.ref.transform.getRight(axisX)
+        // this.ref.transform.getForward( axisZ )
 
         // quat.identity(rotation)
+        // quat.setAxes(rotation, axisZ, axisX, axisY)
+        // quat.rotateX(rotation, rotation, (this.coords[1] - mouse.position.pixels[1]) * 0.01)
+        // console.log(rotation)
+        // quat.add(this.ref.transform.localRotation, this.ref.transform.localRotation, rotation)
+
+        // this.ref.transform.rotateY((this.coords[0] - mouse.position.pixels[0]) * 0.01)
+        // this.ref.transform.invalidate()
+
+        // mat3.rotate(rotation, rotation, )
+        // mat4.identity(rotation)
+        // mat4.fromQuat(rotation, this.rotation)
+        // mat4.rotateY(rotation, rotation, 0.001)//(this.coords[1] - mouse.position.pixels[1]) * 0.01)
+        // mat4.rotate(rotation, rotation, (this.coords[1] - mouse.position.pixels[1]) * 0.01, axisX)
 
 
-        // quat.rotateZ(rotation, rotation, (this.coords[1] - mouse.position.pixels[1]) * 0.01)
-        // quat.setAxisAngle(rotation, axis, (this.coords[1] - mouse.position.pixels[1]) * 0.01)
+        // mat4.multiply(rotation, this.matrix, rotation)
+        // this.ref.transform.setMatrix(rotation)
+        // this.ref.transform.invalidate()
+
+        // this.ref.transform.setRotation(axisX, (this.coords[1] - mouse.position.pixels[1]) * 0.01 )
+
+        // // const axisX = vec3.create()
+        // // const up = [0, 1, 0]
+        // // const axisY = vec3.create()
+        // // const axisZ = vec3.create()
+
+        // // this.ref.transform.getUp( axisY )
+        // // vec3.cross(axisX, axisZ, up)
+        // // vec3.normalize(axisX, axisX)
+
+        // // console.log(axisY);
+
+        // // vec3.set(
+        // //   axisX,
+        // //   1 - Math.abs(axis[0]),
+        // //   1 - Math.abs(axis[1]),
+        // //   1 - Math.abs(axis[2]),
+        // // )
+        // // vec3.set(axisY, 0, axisX[1], 0)
+        // // vec3.set(axisZ, 0, 0, axisX[2])
+        // // vec3.set(axisX, axisX[0], 0, 0)
+        // // // vec3.cross(axisX, axisX, axis)
+        // // // vec3.cross(axisX, axisY, axisZ)
+
+        // vec3.copy(this.ref.transform.localPosition, this.position)
+        // this.ref.transform.translate(translation[0], translation[1], translation[2])
+
+        // const m = mat4.create()
+        // mat4.identity(m)
+        // mat4.rotate(m, m, (this.coords[0] - mouse.position.pixels[0]) * 0.01, axisY)
+
+        // // quat.setAxisAngle(rotation, axisX, (this.coords[1] - mouse.position.pixels[1]) * 0.01)
+        // // quat.rotateY(rotation, rotation, (this.coords[0] - mouse.position.pixels[0]) * 0.01)
+
+        // this.ref.transform.setRotation(axisX, (this.coords[1] - mouse.position.pixels[1]) * 0.01 )
+        // // this.ref.transform.rotateY((this.coords[0] - mouse.position.pixels[0]) * 0.01)
+
+        // // mat4.rotateY(m, m, (this.coords[0] - mouse.position.pixels[0]) * 0.01)
+        // // mat4.rotate(m, m, (this.coords[1] - mouse.position.pixels[1]) * 0.01, axisX)
+
+        // // mat4.rotate(m, m, (this.coords[0] - mouse.position.pixels[0]) * 0.01, axisY)
+        // // mat4.rotate(m, m, (this.coords[1] - mouse.position.pixels[1]) * 0.01, axisZ)
+
+        // // quat.identity(rotation)
 
 
-        // vec3.transformQuat(translation, translation, rotation)
-        vec3.transformMat4(translation, translation, m)
-        vec3.negate(translation, translation)
+        // // quat.rotateZ(rotation, rotation, (this.coords[1] - mouse.position.pixels[1]) * 0.01)
+        // // quat.setAxisAngle(rotation, axis, (this.coords[1] - mouse.position.pixels[1]) * 0.01)
 
-        this.ref.transform.translate(translation[0], translation[1], translation[2])
 
-        // console.log(this.ref.transform.localPosition);
+        // // vec3.transformQuat(translation, translation, rotation)
+        // vec3.transformMat4(translation, translation, m)
+        // vec3.negate(translation, translation)
+
+        // this.ref.transform.translate(translation[0], translation[1], translation[2])
+
+        // // console.log(this.ref.transform.localPosition);
 
       }
     })
