@@ -55,7 +55,7 @@ export default class Geometry {
   }
 
   draw(pipeline: Pipeline) {
-    pipeline['updateUniforms']()
+    pipeline.updateUniforms()
 
     for (let i = 0; i < this.buffers.length; i++) {
       const buffer = this.buffers[i]

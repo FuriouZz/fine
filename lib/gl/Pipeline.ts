@@ -108,51 +108,7 @@ export default class Pipeline {
     this.onUse.dispatch(this.uniforms)
   }
 
-  private updateUniforms() {
-    // console.log(
-    //   "FLOAT" + ` ${GLUniformType.FLOAT}\n`,
-    //   "FLOAT_VEC2" + ` ${GLUniformType.FLOAT_VEC2}\n`,
-    //   "FLOAT_VEC3" + ` ${GLUniformType.FLOAT_VEC3}\n`,
-    //   "FLOAT_VEC4" + ` ${GLUniformType.FLOAT_VEC4}\n`,
-    //   "INT_VEC2" + ` ${GLUniformType.INT_VEC2}\n`,
-    //   "INT_VEC3" + ` ${GLUniformType.INT_VEC3}\n`,
-    //   "INT_VEC4" + ` ${GLUniformType.INT_VEC4}\n`,
-    //   "BOOL" + ` ${GLUniformType.BOOL}\n`,
-    //   "BOOL_VEC2" + ` ${GLUniformType.BOOL_VEC2}\n`,
-    //   "BOOL_VEC3" + ` ${GLUniformType.BOOL_VEC3}\n`,
-    //   "BOOL_VEC4" + ` ${GLUniformType.BOOL_VEC4}\n`,
-    //   "FLOAT_MAT2" + ` ${GLUniformType.FLOAT_MAT2}\n`,
-    //   "FLOAT_MAT3" + ` ${GLUniformType.FLOAT_MAT3}\n`,
-    //   "FLOAT_MAT4" + ` ${GLUniformType.FLOAT_MAT4}\n`,
-    //   "SAMPLER_2D" + ` ${GLUniformType.SAMPLER_2D}\n`,
-    //   "SAMPLER_CUBE" + ` ${GLUniformType.SAMPLER_CUBE}\n`,
-
-    //   // Added with WebGL 2
-    //   "UNSIGNED_INT" + ` ${GLUniformType.UNSIGNED_INT}\n`,
-    //   "UNSIGNED_INT_VEC2" + ` ${GLUniformType.UNSIGNED_INT_VEC2}\n`,
-    //   "UNSIGNED_INT_VEC3" + ` ${GLUniformType.UNSIGNED_INT_VEC3}\n`,
-    //   "UNSIGNED_INT_VEC4" + ` ${GLUniformType.UNSIGNED_INT_VEC4}\n`,
-    //   "FLOAT_MAT2x3" + ` ${GLUniformType.FLOAT_MAT2x3}\n`,
-    //   "FLOAT_MAT2x4" + ` ${GLUniformType.FLOAT_MAT2x4}\n`,
-    //   "FLOAT_MAT3x2" + ` ${GLUniformType.FLOAT_MAT3x2}\n`,
-    //   "FLOAT_MAT3x4" + ` ${GLUniformType.FLOAT_MAT3x4}\n`,
-    //   "FLOAT_MAT4x2" + ` ${GLUniformType.FLOAT_MAT4x2}\n`,
-    //   "FLOAT_MAT4x3" + ` ${GLUniformType.FLOAT_MAT4x3}\n`,
-    //   "SAMPLER_3D" + ` ${GLUniformType.SAMPLER_3D}\n`,
-    //   "SAMPLER_2D_SHADOW" + ` ${GLUniformType.SAMPLER_2D_SHADOW}\n`,
-    //   "SAMPLER_2D_ARRAY" + ` ${GLUniformType.SAMPLER_2D_ARRAY}\n`,
-    //   "SAMPLER_2D_ARRAY_SHADOW" + ` ${GLUniformType.SAMPLER_2D_ARRAY_SHADOW}\n`,
-    //   "SAMPLER_CUBE_SHADOW" + ` ${GLUniformType.SAMPLER_CUBE_SHADOW}\n`,
-    //   "INT_SAMPLER_2D" + ` ${GLUniformType.INT_SAMPLER_2D}\n`,
-    //   "INT_SAMPLER_3D" + ` ${GLUniformType.INT_SAMPLER_3D}\n`,
-    //   "INT_SAMPLER_CUBE" + ` ${GLUniformType.INT_SAMPLER_CUBE}\n`,
-    //   "INT_SAMPLER_2D_ARRAY" + ` ${GLUniformType.INT_SAMPLER_2D_ARRAY}\n`,
-    //   "UNSIGNED_INT_SAMPLER_2D" + ` ${GLUniformType.UNSIGNED_INT_SAMPLER_2D}\n`,
-    //   "UNSIGNED_INT_SAMPLER_3D" + ` ${GLUniformType.UNSIGNED_INT_SAMPLER_3D}\n`,
-    //   "UNSIGNED_INT_SAMPLER_CUBE" + ` ${GLUniformType.UNSIGNED_INT_SAMPLER_CUBE}\n`,
-    //   "UNSIGNED_INT_SAMPLER_2D_ARRAY" + ` ${GLUniformType.UNSIGNED_INT_SAMPLER_2D_ARRAY}\n`,
-    // );
-
+  updateUniforms() {
     for (let i = 0; i < this._uniforms.length; i++) {
       const uniform = this._uniforms[i];
       if (this.uniforms.hasOwnProperty(uniform.name)) {
